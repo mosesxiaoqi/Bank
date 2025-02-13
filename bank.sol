@@ -10,6 +10,9 @@ contract Bank {
 
     constructor() {
         owner = msg.sender; // 在构造函数中初始化 owner
+        numbers.push(address(0));
+        numbers.push(address(0));
+        numbers.push(address(0)); 
     }
 
     /// 调用者未被授权进行此操作。
@@ -19,24 +22,22 @@ contract Bank {
 
     receive() external payable {
         balances[msg.sender] += msg.value;
-        updateRanking(msg.sender, msg.value);
+        updateRanking(msg.sender, balances[msg.sender]);
         emit Received(msg.sender, msg.value);
     } // 允许接收 ETH
 
     function updateRanking(address _address, uint value) private {
-        if (numbers.length < 3) 
+        
+        for (uint i = 0; i < 3; i++)
         {
-            numbers.push(_address);
-        }
-        else
-        {
-            for (uint i = 0; i < 3; i++)
+            if (numbers[i] == _address)
             {
-                if (balances[numbers[i]] < value)
-                {
-                    numbers[i] = _address;
-                    break;
-                }
+                break;
+            }
+            else if (balances[numbers[i]] < value)
+            {
+                numbers[i] = _address;
+                break;
             }
         }
     }
