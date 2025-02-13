@@ -51,6 +51,9 @@ contract Bank {
     }
 
     function getTopThreeUserAddressInfo(uint idx) public view returns (address) {
+        if (idx >= numbers.length) {
+            return address(0);
+        }
         return numbers[idx];
     }
 
